@@ -5,7 +5,7 @@ import "../ui/styles.css";
 
 const defaultSettings: Settings = {
   owner: "",
-  repo: "",
+  repo: "leetcode-helper",
   branch: "main",
   token: "",
   timezone: "Asia/Kolkata",
@@ -77,6 +77,29 @@ function Options() {
     }
   }
 
+  async function resetSettings() {
+    const confirmed = window.confirm("Reset local Litcode Helper settings and clear the upload queue?");
+    if (!confirmed) {
+      return;
+    }
+
+    setBusy(true);
+    setMessage("");
+
+    try {
+      const response = await chrome.runtime.sendMessage({ type: "RESET_SETTINGS" });
+      if (!response?.ok) {
+        throw new Error(response?.error || "Could not reset settings.");
+      }
+      setSettings(defaultSettings);
+      setMessage("Settings reset.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : String(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function openTokenPage() {
     window.open(
       "https://github.com/settings/personal-access-tokens/new?name=Litcode%20Helper&description=LeetCode%20solution%20logger&contents=write",
@@ -124,10 +147,10 @@ function Options() {
           </ol>
           <div className="setup-actions">
             <button className="button secondary" type="button" onClick={openRepoPage}>
-              Create repo
+              1. Create repo
             </button>
             <button className="button secondary" type="button" onClick={openTokenPage}>
-              Create token
+              2. Create token
             </button>
           </div>
         </section>
@@ -215,6 +238,9 @@ function Options() {
             </button>
             <button className="button secondary" disabled={busy} type="button" onClick={testGitHub}>
               Test GitHub
+            </button>
+            <button className="button danger" disabled={busy} type="button" onClick={resetSettings}>
+              Reset settings
             </button>
           </div>
         </form>

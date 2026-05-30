@@ -1,12 +1,13 @@
 {
   "name": "litcode-helper",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "A personal browser extension that logs accepted LeetCode solutions to GitHub.",
   "scripts": {
     "dev": "vite build --watch",
     "build": "tsc && vite build",
+    "package": "pnpm run build && cd dist && zip -r ../litcode-helper.zip .",
     "preview": "vite preview"
   },
   "dependencies": {

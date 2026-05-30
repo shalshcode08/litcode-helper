@@ -33,6 +33,20 @@ pnpm dev
 
 Reload the extension from `chrome://extensions` after rebuilds.
 
+## Package For Chrome Web Store
+
+```bash
+pnpm run package
+```
+
+This creates:
+
+```txt
+litcode-helper.zip
+```
+
+Upload that ZIP in the Chrome Web Store Developer Dashboard.
+
 ## GitHub Setup
 
 Use this repo name for the solution log:
@@ -106,3 +120,15 @@ Your repo is empty. Add a `README.md` in GitHub first, then retry.
 Refresh the LeetCode tab, then use **Check page** and **Save current problem** again.
 
 Queued uploads stay in the extension. After fixing GitHub settings, click **Retry queue**.
+
+## Chrome Web Store Notes
+
+Use [PRIVACY.md](./PRIVACY.md) as the source for the extension privacy policy. Host it publicly before submitting the Chrome Web Store listing.
+
+Permission explanations:
+
+- `storage`: stores settings, GitHub token, upload status, retry queue, and duplicate tracking locally.
+- `tabs`: checks the active LeetCode tab when the user manually saves a problem.
+- `scripting`: injects the content script into an already-open LeetCode tab for manual save.
+- `https://leetcode.com/*`: reads the active problem, statement, editor code, and accepted status.
+- `https://api.github.com/*`: writes solution files to the user's configured GitHub repo.

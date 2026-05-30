@@ -182,12 +182,19 @@ function Popup() {
         ) : (
           <section className="surface stack">
             <div>
-              <h2>GitHub is not configured</h2>
-              <p className="muted">Add your repo and fine-grained token before solving.</p>
+              <h2>Setup Required</h2>
+              <p className="muted">Connect a GitHub repo before Litcode Helper can save solutions.</p>
             </div>
-            <button className="button" onClick={openOptions}>
-              Open settings
-            </button>
+            <ol className="steps compact">
+              <li>Create a repo named leetcode-helper with a README.</li>
+              <li>Create a fine-grained token for that repo.</li>
+              <li>Paste the token in settings and test GitHub.</li>
+            </ol>
+            <div className="actions">
+              <button className="button" onClick={openOptions}>
+                Open settings
+              </button>
+            </div>
           </section>
         )}
 

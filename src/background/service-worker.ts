@@ -45,7 +45,7 @@ type GitHubContent = {
 
 const DEFAULT_SETTINGS: Settings = {
   owner: "",
-  repo: "",
+  repo: "leetcode-helper",
   branch: "main",
   token: "",
   timezone: "Asia/Kolkata",
@@ -125,6 +125,15 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true;
   }
 
+  if (message?.type === "RESET_SETTINGS") {
+    resetSettings()
+      .then((result) => sendResponse({ ok: true, result }))
+      .catch((error: unknown) =>
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) })
+      );
+    return true;
+  }
+
   return false;
 });
 
@@ -166,6 +175,16 @@ async function setQueue(queue: QueueItem[]) {
 
 async function setStatus(status: UploadStatus) {
   await chrome.storage.local.set({ status });
+}
+
+async function resetSettings() {
+  await chrome.storage.local.set({
+    settings: DEFAULT_SETTINGS,
+    status: DEFAULT_STATUS,
+    queue: [],
+    processed: []
+  });
+  return { settings: DEFAULT_SETTINGS };
 }
 
 async function getDashboard() {
