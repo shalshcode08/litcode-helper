@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Litcode Helper",
+  "version": "0.1.0",
+  "description": "Automatically logs accepted LeetCode solutions to a GitHub repository.",
+  "action": {
+    "default_title": "Litcode Helper",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/problems/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["https://leetcode.com/*", "https://api.github.com/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["https://leetcode.com/*"]
+    }
+  ]
+}

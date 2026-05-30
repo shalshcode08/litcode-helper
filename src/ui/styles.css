@@ -1,0 +1,249 @@
+:root {
+  color: #16130f;
+  background: #f8f4e9;
+  font-family:
+    ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  font-synthesis: none;
+  line-height: 1.45;
+  text-rendering: geometricPrecision;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 360px;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.shell {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(34, 93, 82, 0.1), transparent 34%),
+    linear-gradient(315deg, rgba(185, 60, 42, 0.1), transparent 34%),
+    #f8f4e9;
+  color: #16130f;
+}
+
+.popup-shell {
+  width: 380px;
+}
+
+.panel {
+  padding: 18px;
+}
+
+.options-panel {
+  margin: 0 auto;
+  max-width: 920px;
+  padding: 42px 24px;
+}
+
+.masthead {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+
+.mark {
+  align-items: center;
+  background: #225d52;
+  border: 2px solid #16130f;
+  box-shadow: 3px 3px 0 #16130f;
+  color: #fff9ea;
+  display: inline-flex;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 15px;
+  font-weight: 800;
+  height: 36px;
+  justify-content: center;
+  letter-spacing: 0;
+  width: 36px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 22px;
+  letter-spacing: 0;
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.muted {
+  color: #615b50;
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-size: 13px;
+}
+
+.surface {
+  background: rgba(255, 252, 244, 0.82);
+  border: 2px solid #16130f;
+  box-shadow: 6px 6px 0 #16130f;
+  padding: 16px;
+}
+
+.stack {
+  display: grid;
+  gap: 14px;
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+label {
+  display: grid;
+  gap: 6px;
+}
+
+.label-text {
+  color: #3b362f;
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+input,
+select {
+  background: #fffdf7;
+  border: 2px solid #16130f;
+  color: #16130f;
+  min-height: 42px;
+  padding: 9px 10px;
+  width: 100%;
+}
+
+input:focus,
+select:focus {
+  outline: 3px solid rgba(230, 172, 78, 0.7);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.button {
+  align-items: center;
+  background: #e6ac4e;
+  border: 2px solid #16130f;
+  box-shadow: 3px 3px 0 #16130f;
+  color: #16130f;
+  cursor: pointer;
+  display: inline-flex;
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  gap: 8px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 9px 12px;
+  text-decoration: none;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.button:hover {
+  box-shadow: 2px 2px 0 #16130f;
+  transform: translate(1px, 1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.button.secondary {
+  background: #fffdf7;
+}
+
+.button.danger {
+  background: #b93c2a;
+  color: #fff9ea;
+}
+
+.status {
+  border-left: 6px solid #81786a;
+  display: grid;
+  gap: 5px;
+}
+
+.status.success {
+  border-color: #225d52;
+}
+
+.status.error {
+  border-color: #b93c2a;
+}
+
+.status.saving {
+  border-color: #e6ac4e;
+}
+
+.mono {
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.notice {
+  background: rgba(34, 93, 82, 0.08);
+  border: 1px solid rgba(22, 19, 15, 0.3);
+  padding: 12px;
+}
+
+.divider {
+  background: #16130f;
+  height: 2px;
+  margin: 4px 0;
+  opacity: 0.2;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .options-panel {
+    padding: 22px 14px;
+  }
+}
