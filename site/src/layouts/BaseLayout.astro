@@ -1,4 +1,6 @@
 ---
+import Analytics from "@vercel/analytics/astro";
+
 type Props = {
   title?: string;
   description?: string;
@@ -51,6 +53,7 @@ const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
         <a href="/privacy/">Privacy Policy</a>
       </footer>
     </main>
+    <Analytics />
   </body>
 </html>
 
