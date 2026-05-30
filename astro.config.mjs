@@ -4,5 +4,5 @@ export default defineConfig({
   srcDir: "site/src",
   publicDir: "site/public",
   outDir: "site-dist",
-  site: "https://litcode-helper.example.com"
+  site: "https://litcode-helper.vercel.app"
 });
