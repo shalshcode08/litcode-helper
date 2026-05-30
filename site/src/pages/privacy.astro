@@ -1,0 +1,93 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Privacy Policy - Litcode Helper"
+  description="Privacy policy for Litcode Helper, a browser extension for saving LeetCode solutions to GitHub."
+  canonicalPath="/privacy/"
+>
+  <article class="wrap privacy">
+    <p class="eyebrow">Privacy Policy</p>
+    <h1>Litcode Helper Privacy Policy</h1>
+    <p class="updated">Last updated: May 30, 2026</p>
+
+    <section>
+      <h2>Data Stored Locally</h2>
+      <p>
+        Litcode Helper stores settings in the user's browser, including GitHub owner, repository,
+        branch, timezone, duplicate preference, upload status, retry queue, and the fine-grained
+        GitHub token provided by the user.
+      </p>
+    </section>
+
+    <section>
+      <h2>Data Sent To GitHub</h2>
+      <p>
+        When a solution is saved, Litcode Helper sends the problem title, problem URL, problem
+        statement, language, submitted code, and target file path to GitHub's API. This data is sent
+        only to the repository configured by the user.
+      </p>
+    </section>
+
+    <section>
+      <h2>No Tracking</h2>
+      <p>
+        Litcode Helper does not use analytics, advertising, tracking pixels, telemetry, or a backend
+        server. Data is not sold or shared with third parties.
+      </p>
+    </section>
+
+    <section>
+      <h2>GitHub Token</h2>
+      <p>
+        The GitHub token is stored locally in browser extension storage and is used only for GitHub
+        API requests needed to create or update files in the configured repository.
+      </p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .privacy {
+    padding: clamp(56px, 9vw, 92px) 0 28px;
+  }
+
+  .eyebrow {
+    color: #b93c2a;
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size: clamp(38px, 6vw, 62px);
+    line-height: 1;
+    max-width: 780px;
+  }
+
+  .updated {
+    color: #665f54;
+    margin-top: 14px;
+  }
+
+  section {
+    border-top: 2px solid rgba(22, 19, 15, 0.22);
+    margin-top: 28px;
+    max-width: 760px;
+    padding-top: 22px;
+  }
+
+  h2 {
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: #3b362f;
+    font-size: 16px;
+  }
+</style>
