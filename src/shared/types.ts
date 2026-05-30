@@ -22,6 +22,18 @@ export type SolvedProblem = {
   dateDir: string;
 };
 
+export type PageDiagnostic = {
+  isProblemPage: boolean;
+  slug: string;
+  title: string;
+  url: string;
+  difficulty: string;
+  language: string;
+  extension: string;
+  codeLength: number;
+  statementLength: number;
+};
+
 export type UploadStatus = {
   state: "idle" | "saving" | "success" | "error";
   message: string;

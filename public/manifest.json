@@ -19,7 +19,7 @@
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "scripting"],
   "host_permissions": ["https://leetcode.com/*", "https://api.github.com/*"],
   "web_accessible_resources": [
     {

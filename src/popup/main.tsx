@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import type { Settings, UploadStatus } from "../shared/types";
+import type { PageDiagnostic, Settings, UploadStatus } from "../shared/types";
 import "../ui/styles.css";
 
 type Dashboard = {
@@ -17,6 +17,7 @@ const fallbackStatus: UploadStatus = {
 
 function Popup() {
   const [dashboard, setDashboard] = useState<Dashboard | null>(null);
+  const [diagnostic, setDiagnostic] = useState<PageDiagnostic | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -27,25 +28,71 @@ function Popup() {
 
   useEffect(() => {
     void refresh();
+    void checkPage(true);
   }, []);
+
+  async function sendToActiveProblemTab(message: unknown) {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab.id || !tab.url?.startsWith("https://leetcode.com/problems/")) {
+      throw new Error("Open a LeetCode problem tab first.");
+    }
+
+    try {
+      return await chrome.tabs.sendMessage(tab.id, message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (!errorMessage.includes("Receiving end does not exist")) {
+        throw error;
+      }
+
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: ["content.js"]
+      });
+      return chrome.tabs.sendMessage(tab.id, message);
+    }
+  }
+
+  async function checkPage(silent = false) {
+    setBusy(true);
+    if (!silent) {
+      setMessage("");
+    }
+
+    try {
+      const response = await sendToActiveProblemTab({ type: "CHECK_PAGE" });
+      if (!response?.ok) {
+        throw new Error(response?.error || "Could not inspect this LeetCode page.");
+      }
+      setDiagnostic(response.diagnostic);
+      if (!silent) {
+        setMessage(
+          `Page check passed: code ${response.diagnostic.codeLength} chars, statement ${response.diagnostic.statementLength} chars.`
+        );
+      }
+    } catch (error) {
+      setDiagnostic(null);
+      if (!silent) {
+        setMessage(error instanceof Error ? error.message : String(error));
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function manualSave() {
     setBusy(true);
     setMessage("");
 
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab.id || !tab.url?.startsWith("https://leetcode.com/problems/")) {
-        throw new Error("Open a LeetCode problem tab first.");
-      }
-
-      const response = await chrome.tabs.sendMessage(tab.id, { type: "MANUAL_SAVE" });
+      const response = await sendToActiveProblemTab({ type: "MANUAL_SAVE" });
       if (!response?.ok) {
         throw new Error(response?.error || "Manual save failed.");
       }
 
-      setMessage("Capture sent. Check the status below.");
+      setMessage("Saved. Check the status below.");
       await refresh();
+      await checkPage();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : String(error));
     } finally {
@@ -106,9 +153,22 @@ function Popup() {
                 Branch {dashboard?.settings.branch || "main"} · Queue {dashboard?.queueCount ?? 0}
               </p>
             </div>
+            {diagnostic ? (
+              <div className="notice muted">
+                <p>
+                  Page: <span className="mono">{diagnostic.slug}</span>
+                </p>
+                <p>
+                  Code {diagnostic.codeLength} chars · Statement {diagnostic.statementLength} chars
+                </p>
+              </div>
+            ) : null}
             <div className="actions">
               <button className="button" disabled={busy} onClick={manualSave}>
                 Save current problem
+              </button>
+              <button className="button secondary" disabled={busy} onClick={() => checkPage()}>
+                Check page
               </button>
               <button
                 className="button secondary"

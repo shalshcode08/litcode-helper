@@ -292,6 +292,34 @@ async function testGitHub() {
   const settings = await getSettings();
   assertConfigured(settings);
   const response = await githubFetch(settings, `/repos/${settings.owner}/${settings.repo}`);
+  try {
+    await githubFetch(
+      settings,
+      `/repos/${settings.owner}/${settings.repo}/branches/${encodeURIComponent(settings.branch)}`
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("GitHub 404")) {
+      throw new Error(
+        `Branch "${settings.branch}" does not exist yet. Initialize the repo with a README, then retry.`
+      );
+    }
+    throw error;
+  }
+
+  try {
+    await githubFetch(
+      settings,
+      `/repos/${settings.owner}/${settings.repo}/contents?ref=${encodeURIComponent(settings.branch)}`
+    );
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("GitHub 403")) {
+      throw new Error(
+        "Token can reach the repo but cannot read repository contents. Recreate the fine-grained token with Contents: Read and write for this repo."
+      );
+    }
+    throw error;
+  }
+
   return {
     repo: response.full_name,
     private: Boolean(response.private),
@@ -347,6 +375,18 @@ async function githubFetch(settings: Settings, path: string, init: RequestInit =
     } catch {
       // Keep the status text.
     }
+    if (response.status === 403 && /personal access token|resource not accessible/i.test(detail)) {
+      throw new Error(
+        "GitHub 403: Resource not accessible by personal access token. Give the token access to this repo with Contents: Read and write."
+      );
+    }
+
+    if (response.status === 409 && /empty|branch|reference/i.test(detail)) {
+      throw new Error(
+        `GitHub ${response.status}: ${detail}. Initialize the repo with a README and confirm the branch name.`
+      );
+    }
+
     throw new Error(`GitHub ${response.status}: ${detail}`);
   }
 

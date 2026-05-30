@@ -17,6 +17,18 @@ type SolvedProblem = {
   submissionId?: string;
 };
 
+type PageDiagnostic = {
+  isProblemPage: boolean;
+  slug: string;
+  title: string;
+  url: string;
+  difficulty: string;
+  language: string;
+  extension: string;
+  codeLength: number;
+  statementLength: number;
+};
+
 const CONTENT_SOURCE = "litcode-helper-content";
 const INJECTED_SOURCE = "litcode-helper-injected";
 const AUTO_CAPTURE_COOLDOWN_MS = 7000;
@@ -299,11 +311,34 @@ async function captureAndSave(reason: "automatic" | "manual", submissionId?: str
     submissionId
   };
 
-  await chrome.runtime.sendMessage({
+  const response = await chrome.runtime.sendMessage({
     type: "SAVE_SOLUTION",
     reason,
     problem
   });
+
+  if (!response?.ok) {
+    throw new Error(response?.error || "GitHub upload failed.");
+  }
+}
+
+async function getPageDiagnostic(): Promise<PageDiagnostic> {
+  const slug = getSlug();
+  const editor = await getEditorSnapshot();
+  const language = editor.language || findTextBySelectors(["button[aria-haspopup='listbox']"]);
+  const statement = getStatement();
+
+  return {
+    isProblemPage: window.location.pathname.startsWith("/problems/") && slug !== "unknown-problem",
+    slug,
+    title: getTitle(slug),
+    url: getProblemUrl(slug),
+    difficulty: getDifficulty(),
+    language: language || "text",
+    extension: mapExtension(language),
+    codeLength: editor.code.trim().length,
+    statementLength: statement.length
+  };
 }
 
 function maybeAutoCapture(submissionId?: string) {
@@ -350,6 +385,15 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === "MANUAL_SAVE") {
     captureAndSave("manual")
       .then(() => sendResponse({ ok: true }))
+      .catch((error: unknown) =>
+        sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) })
+      );
+    return true;
+  }
+
+  if (message?.type === "CHECK_PAGE") {
+    getPageDiagnostic()
+      .then((diagnostic) => sendResponse({ ok: true, diagnostic }))
       .catch((error: unknown) =>
         sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) })
       );
