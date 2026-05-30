@@ -1,134 +1,120 @@
 # Litcode Helper
 
-Litcode Helper is a personal Chrome/Edge extension that saves accepted LeetCode solutions into your GitHub repo.
+Litcode Helper is a Chrome extension that saves accepted LeetCode solutions to a GitHub repository.
 
-It creates files like:
+It captures the problem link, statement, language, and submitted code, then stores each solution by date.
 
 ```txt
-2026-05-30/add-two-numbers.cpp
-2026-05-30/two-sum.js
+leetcode-helper/
+└── 2026-05-30/
+    ├── two-sum.js
+    └── add-two-numbers.cpp
 ```
 
-Each file contains the problem link, statement, metadata, and your submitted code.
+## Features
 
-## Install Locally
+- Automatically logs accepted LeetCode submissions
+- Saves solutions into daily GitHub folders
+- Includes problem link, statement, metadata, and code
+- Supports manual save and retry queue
+- Uses the user's own GitHub repo and fine-grained token
+- No backend, analytics, ads, or tracking
+
+## Tech Stack
+
+- Chrome Extension Manifest V3
+- TypeScript
+- React
+- Vite
+- Astro landing page
+- pnpm
+
+## Development
+
+Install dependencies:
 
 ```bash
 pnpm install
-pnpm run build
 ```
 
-Then load the extension:
-
-1. Open `chrome://extensions`.
-2. Enable **Developer mode**.
-3. Click **Load unpacked**.
-4. Select the `dist` folder from this project.
-
-During development, use:
+Run extension build in watch mode:
 
 ```bash
 pnpm dev
 ```
 
-Reload the extension from `chrome://extensions` after rebuilds.
+Build extension:
 
-## Package For Chrome Web Store
+```bash
+pnpm run build
+```
+
+Package extension for Chrome Web Store:
 
 ```bash
 pnpm run package
 ```
 
-This creates:
+Build landing page:
 
-```txt
-litcode-helper.zip
+```bash
+pnpm run landing:build
 ```
 
-Upload that ZIP in the Chrome Web Store Developer Dashboard.
+## Local Extension Install
 
-## GitHub Setup
+1. Run `pnpm run build`
+2. Open `chrome://extensions`
+3. Enable **Developer mode**
+4. Click **Load unpacked**
+5. Select the `dist/` folder
 
-Use this repo name for the solution log:
+## User Setup
+
+Create a GitHub repository named:
 
 ```txt
 leetcode-helper
 ```
 
-Setup order:
+Enable **Add a README file** while creating the repo. This creates the `main` branch, which the extension needs before it can upload files.
 
-1. Create a new GitHub repo named `leetcode-helper`.
-2. While creating it, check **Add a README file**. This step is required.
-3. After the repo exists, create the fine-grained token.
+Then create a fine-grained GitHub token:
 
-The README matters because it creates the `main` branch. Litcode Helper needs that branch before it can write solution files. If you skip the README, uploads can fail with a branch error.
+1. Open `https://github.com/settings/personal-access-tokens/new`
+2. Select only the `leetcode-helper` repository
+3. Set **Contents** to **Read and write**
+4. Leave **Metadata** as **Read-only**
+5. Paste the token into Litcode Helper settings
+6. Click **Test GitHub**
 
-Create the token after the repo exists:
+## Landing Page Deployment
 
-1. Open GitHub fine-grained tokens: `https://github.com/settings/personal-access-tokens/new`
-2. Set **Repository access** to **Only select repositories**.
-3. Select the `leetcode-helper` repo.
-4. Under **Repository permissions**, set **Contents** to **Read and write**.
-5. Leave **Metadata** as **Read-only**.
-6. Generate the token and paste it into Litcode Helper settings.
+The Astro landing page lives in `site/` and builds to `site-dist/`.
 
-In Litcode Helper settings, fill:
+Recommended Vercel settings:
 
 ```txt
-Owner: your-github-username
-Repository: leetcode-helper
-Branch: main
-Timezone: Asia/Kolkata
-Token: github_pat_...
+Framework Preset: Astro
+Build Command: pnpm run landing:build
+Output Directory: site-dist
+Install Command: pnpm install
 ```
 
-Click **Test GitHub**. Do not solve problems until this passes.
-
-## Usage
-
-Normal flow:
-
-1. Open a LeetCode problem.
-2. Solve and submit it.
-3. When LeetCode shows **Accepted**, Litcode Helper tries to upload automatically.
-
-Manual fallback:
-
-1. Keep the LeetCode problem tab active.
-2. Open the Litcode Helper popup.
-3. Click **Check page**.
-4. Click **Save current problem**.
-
-## Troubleshooting
-
-`GitHub 403: Resource not accessible by personal access token`
-
-Your token can not write to the repo. Create a new fine-grained token and make sure:
+Production URL:
 
 ```txt
-Repository access: only your solutions repo
-Contents: Read and write
-Metadata: Read-only
+https://litcode-helper.vercel.app/
 ```
 
-`Branch "main" does not exist`
+Privacy policy:
 
-Your repo is empty. Add a `README.md` in GitHub first, then retry.
+```txt
+https://litcode-helper.vercel.app/privacy/
+```
 
-`Could not read the LeetCode editor content`
+## Privacy
 
-Refresh the LeetCode tab, then use **Check page** and **Save current problem** again.
+Litcode Helper stores settings and the GitHub token locally in the browser. It sends problem data and solution code only to GitHub's API for the repository configured by the user.
 
-Queued uploads stay in the extension. After fixing GitHub settings, click **Retry queue**.
-
-## Chrome Web Store Notes
-
-Use [PRIVACY.md](./PRIVACY.md) as the source for the extension privacy policy. Host it publicly before submitting the Chrome Web Store listing.
-
-Permission explanations:
-
-- `storage`: stores settings, GitHub token, upload status, retry queue, and duplicate tracking locally.
-- `tabs`: checks the active LeetCode tab when the user manually saves a problem.
-- `scripting`: injects the content script into an already-open LeetCode tab for manual save.
-- `https://leetcode.com/*`: reads the active problem, statement, editor code, and accepted status.
-- `https://api.github.com/*`: writes solution files to the user's configured GitHub repo.
+See [PRIVACY.md](./PRIVACY.md).
