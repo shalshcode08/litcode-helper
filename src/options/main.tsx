@@ -77,6 +77,22 @@ function Options() {
     }
   }
 
+  function openTokenPage() {
+    window.open(
+      "https://github.com/settings/personal-access-tokens/new?name=Litcode%20Helper&description=LeetCode%20solution%20logger&contents=write",
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
+  function openRepoPage() {
+    window.open(
+      "https://github.com/new?name=leetcode-helper&description=LeetCode%20solutions%20logged%20by%20Litcode%20Helper&visibility=private&auto_init=1",
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
   return (
     <main className="shell">
       <section className="options-panel stack">
@@ -89,6 +105,32 @@ function Options() {
             </div>
           </div>
         </header>
+
+        <section className="surface setup-card">
+          <div>
+            <h2>GitHub Setup</h2>
+            <p className="muted">
+              Use one repo named <span className="mono">leetcode-helper</span> for your solution log.
+            </p>
+          </div>
+          <ol className="steps">
+            <li>Create a GitHub repo named leetcode-helper.</li>
+            <li>
+              Turn on <strong>Add a README file</strong> while creating the repo.
+            </li>
+            <li>Create a fine-grained token for that repo.</li>
+            <li>Set Contents to Read and write.</li>
+            <li>Paste the token below, then test GitHub.</li>
+          </ol>
+          <div className="setup-actions">
+            <button className="button secondary" type="button" onClick={openRepoPage}>
+              Create repo
+            </button>
+            <button className="button secondary" type="button" onClick={openTokenPage}>
+              Create token
+            </button>
+          </div>
+        </section>
 
         <form className="surface stack" onSubmit={save}>
           <div className="grid">
@@ -106,7 +148,7 @@ function Options() {
               <span className="label-text">Repository</span>
               <input
                 autoComplete="off"
-                placeholder="leetcode-solutions-log"
+                placeholder="leetcode-helper"
                 value={settings.repo}
                 onChange={(event) => update("repo", event.target.value)}
               />
@@ -142,6 +184,9 @@ function Options() {
               value={settings.token}
               onChange={(event) => update("token", event.target.value)}
             />
+            <span className="field-hint">
+              The token must be fine-grained, repo-limited, and allowed to read/write Contents.
+            </span>
           </label>
 
           <label>
@@ -159,8 +204,9 @@ function Options() {
           <div className="divider" />
 
           <section className="notice muted">
-            Use a fine-grained token that can access only this repo and has Contents read/write
-            permission. Create the repo with a README so the default branch exists.
+            Important: check <strong>Add a README file</strong> on GitHub’s new repo page. Without a
+            README, GitHub may not create the <span className="mono">main</span> branch, and uploads
+            will fail.
           </section>
 
           <div className="actions">
