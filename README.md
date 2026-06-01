@@ -4,6 +4,12 @@ Litcode Helper is a Chrome extension that saves accepted LeetCode solutions to a
 
 It captures the problem link, statement, language, and submitted code, then stores each solution by date.
 
+Chrome Web Store:
+
+```txt
+https://chromewebstore.google.com/detail/litcode-helper/jognpaamfpchiihbildhabofogknjbnb
+```
+
 ```txt
 leetcode-helper/
 └── 2026-05-30/
