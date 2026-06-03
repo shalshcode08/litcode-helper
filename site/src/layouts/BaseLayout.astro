@@ -41,7 +41,7 @@ const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
     <main>
       <nav>
         <a class="brand" href="/">
-          <span>LH</span>
+          <img src="/favicon.svg" alt="" aria-hidden="true" />
           Litcode Helper
         </a>
       </nav>
@@ -135,16 +135,10 @@ const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
     gap: 10px;
   }
 
-  .brand span {
-    align-items: center;
-    background: #225d52;
-    border: 2px solid #16130f;
-    box-shadow: 3px 3px 0 #16130f;
-    color: #fff9ea;
-    display: inline-flex;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  .brand img {
+    display: block;
     height: 36px;
-    justify-content: center;
+    object-fit: contain;
     width: 36px;
   }
 

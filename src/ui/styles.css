@@ -61,20 +61,9 @@ select {
 }
 
 .mark {
-  align-items: center;
-  background: #225d52;
-  border: 2px solid #16130f;
-  box-shadow: 3px 3px 0 #16130f;
-  color: #fff9ea;
-  display: inline-flex;
-  font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    monospace;
-  font-size: 15px;
-  font-weight: 800;
+  display: block;
   height: 36px;
-  justify-content: center;
-  letter-spacing: 0;
+  object-fit: contain;
   width: 36px;
 }
 

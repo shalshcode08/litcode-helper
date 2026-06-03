@@ -121,7 +121,7 @@ function Options() {
       <section className="options-panel stack">
         <header className="masthead">
           <div className="brand">
-            <span className="mark">LH</span>
+            <img className="mark" src="/favicon.svg" alt="" aria-hidden="true" />
             <div>
               <h1>Litcode Helper</h1>
               <p className="muted">Configure the GitHub repo that receives your solved problems.</p>
